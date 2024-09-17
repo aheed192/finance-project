@@ -1,19 +1,14 @@
 import Form from '@/app/ui/invoices/edit-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
-import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
-import { updateInvoice } from '/Users/Ahlam/nextjs-dashboard/app/lib/action';
-import { notFound } from 'next/navigation';
+import { fetchCustomers, fetchInvoiceById } from '@/app/lib/data';
 
- 
 export default async function Page({ params }: { params: { id: string } }) {
-    const id = params.id;
-    const [invoice, customers] = await Promise.all([
-        fetchInvoiceById(id),
-        fetchCustomers(),
-      ]);
-      if (!invoice) {
-        notFound();
-      }
+  const id = params.id;
+
+  // Fetch the invoice and customers data
+  const invoice = await fetchInvoiceById(id);
+  const customers = await fetchCustomers();
+
   return (
     <main>
       <Breadcrumbs

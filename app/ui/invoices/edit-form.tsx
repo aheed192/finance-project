@@ -1,16 +1,11 @@
 'use client';
 
 import { CustomerField, InvoiceForm } from '@/app/lib/definitions';
-import {
-  CheckIcon,
-  ClockIcon,
-  CurrencyDollarIcon,
-  UserCircleIcon,
-} from '@heroicons/react/24/outline';
+import { CheckIcon, ClockIcon, CurrencyDollarIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { updateInvoice, State } from '/Users/Ahlam/nextjs-dashboard/app/lib/action';
-import { useActionState } from 'react';
+import { updateInvoice } from '@/app/lib/actions';
+
 export default function EditInvoiceForm({
   invoice,
   customers,
@@ -18,12 +13,16 @@ export default function EditInvoiceForm({
   invoice: InvoiceForm;
   customers: CustomerField[];
 }) {
-  const initialState: State = { message: null, errors: {} };
-  const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
-  const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    await updateInvoice(invoice.id, formData);
+  };
+
   return (
-    <form action={formAction}>
-            <div className="rounded-md bg-gray-50 p-4 md:p-6">
+    <form onSubmit={handleSubmit}>
+      <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
